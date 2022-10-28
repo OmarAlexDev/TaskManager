@@ -1,0 +1,138 @@
+#root{
+  background-color: #E59866;
+  font-family: 'Roboto Mono', monospace;
+}
+.app{
+  width: 100%;
+  position: relative;
+}
+.nav{
+  width: inherit;
+  padding-top: 20px;
+  position: absolute;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1ch;
+}
+.section{
+  padding: 6%;
+  min-height: 100vh;
+}
+.creator{
+  align-items: center;
+  padding-top:200px;
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+}
+.creator> p {
+  font-weight: 400;
+  font-size: 20px;
+}
+input{
+  border: none;
+  outline: none;
+  font-weight: 600;
+  border-radius: 7px;
+  padding: 2%;
+  text-align: center;
+  font-size: 15px;
+}
+.creator > input{
+  width: 300px;
+  height: 20px;
+}
+button{
+  border-style: solid;
+  font-weight: 400;
+  background-color: transparent;
+  border-radius: 10px;
+  padding: 10px;
+  border-width: 2px;
+  cursor: pointer;
+}
+.button-creator{
+  margin-top: 3%;
+  color:#1F1D1D;
+  border-color: #1F1D1D ;
+}
+.button-creator:hover{
+  font-weight: 700;
+  background-color: #1F1D1D;
+  color:white;
+}
+.view-list{
+  background-color: #1F1D1D;
+}
+#no-note{
+  color:white;
+  font-weight: 600;
+  font-size: 25px;
+  text-align: center;
+}
+.lister{
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  overflow-x: auto;
+}
+.lister::-webkit-scrollbar {
+    display: none;
+}
+.task-el{
+  cursor: pointer;
+  color:white;
+  padding: 5px;
+  flex: 0 0 auto;
+  display: flex;         
+  flex-direction: column;
+  position: relative;
+  place-items: center;
+  font-weight: 400;
+}
+.task-sec{
+  padding: 2%;
+  width: 100%;
+}
+.task-sec.id{
+  font-weight: 600;
+  font-size: 25px;
+}
+.task-buttons{
+  display: flex;
+  flex-direction: row;
+  padding: 2%;
+  justify-content: space-evenly;
+}
+.button-lister{
+  color:#E59866;
+  border-color: #E59866 ;
+}
+.button-lister:hover{
+  background-color: #E59866;
+  color:#1F1D1D;
+}
+.filter{
+  margin-bottom: 50px;
+  text-align: center;
+}
+.filter > p{
+  text-align: center;
+  color:#E59866;
+  font-weight: 400;
+  font-size: 20px;
+}
+.filter .check{
+  cursor: pointer;
+}
+.filter > input{
+  width: 300px;
+  height: 20px;
+}
+
+@media only screen and (max-width: 700px) {
+  .lister{
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "content": "Buying groceries",
+      "responsible": "Walter White",
+      "date": "Fri Oct 28 2022",
+      "status": true
+    },
+    {
+      "id": 2,
+      "content": "Walking out dog",
+      "responsible": "Shaggy Shaggers",
+      "date": "Fri Oct 28 2022",
+      "status": false
+    },
+    {
+      "id": 3,
+      "content": "Calling plumber",
+      "responsible": "Luigi Bros",
+      "date": "Fri Oct 28 2022",
+      "status": true
+    },
+    {
+      "id": 4,
+      "content": "Pick up children from school",
+      "responsible": "Penny Wise",
+      "date": "Fri Oct 28 2022",
+      "status": false
+    }
+  ]
+}
