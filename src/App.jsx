@@ -8,8 +8,6 @@ import TaskFilter from "./components/TaskFilter";
 
 import taskService from './services/taskService'
 
-import data from '../db.json'
-
 const App = () => {
   
   const [tasks,setTasks] = React.useState([])
@@ -22,9 +20,6 @@ const App = () => {
     taskService.get()
       .then(res=>{
         setTasks(res)})
-      .catch(res=>{
-        setTasks(data.tasks)
-      })
   },[])
 
   function handleChange(event){
@@ -44,9 +39,12 @@ const App = () => {
   }
 
   function updateStatus(id){
-    const modifTask = tasks.find(t=>t.id==id)
+    let modifTask = tasks.find(t=>t.id==id)
     if(modifTask){
-      modifTask.status=!modifTask.status
+      modifTask={
+        ...modifTask,
+        "status": !modifTask.status
+      }
       taskService.update(id,modifTask)
       .then(res=>{
         setTasks(prevTasks=>prevTasks.map(task=>{
@@ -75,17 +73,15 @@ const App = () => {
     if(newTask.content!="" && newTask.responsible!=""){
       const task ={
         ...newTask,
-        status: false,
-        date: new Date().toDateString(),
-        id: tasks.length+1
+        status: false
       }
       taskService.post(task)
         .then(res=>{
-        console.log("Note Added")
+        setTasks(prev=>prev.concat(res))
+        setNewTask({responsible:"",content:""})
         newI = {msg:"Note Added", on:true}
         setEmptyInput(newI)
         showAlert()
-        setTasks(prev=>prev.concat(task))
         })
         .catch(err=>{
           newI = {msg:"Error, something happened...", on:true}
@@ -100,11 +96,17 @@ const App = () => {
     }
   }
 
+  function handleDelete(id){
+    taskService.remove(id).then(res=>{
+      setTasks(prevTasks=>prevTasks.filter(t=>t.id!=id))
+    })
+  }
+
   const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter)) : tasks 
   const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
 
   const showed_tasks = finished_filter.map(currTask=>{
-    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask}/>
+    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={handleDelete}/>
   })
 
   return (

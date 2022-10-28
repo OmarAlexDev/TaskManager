@@ -20,7 +20,7 @@ const TaskList = (props) =>{
                 <p>Status: <span style={styles} className="status">{status ? "Terminated" : "Pending"}</span></p>
                 <div className="task-buttons">
                     <button onClick={()=>props.handleClick(id)} className="button-lister">{status? "Uncheck" : "Check"}</button>
-                    <button className="button-lister">Remove</button>
+                    <button onClick={()=>props.handleDelete(id)} className="button-lister">Remove</button>
                 </div>
             </div>
         </div>

@@ -94,6 +94,9 @@ button{
   padding: 2%;
   width: 100%;
 }
+.task-sec > p{
+  max-width: 300px;
+}
 .task-sec.id{
   font-weight: 600;
   font-size: 25px;
@@ -134,5 +137,8 @@ button{
   .lister{
     flex-direction: column;
     text-align: center;
+  }
+  .task-sec > p{
+    max-width: none;
   }
 }

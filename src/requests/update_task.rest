@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/tasks/4
+
+Content-Type: application/json
+
+{
+    "important": true
+}
