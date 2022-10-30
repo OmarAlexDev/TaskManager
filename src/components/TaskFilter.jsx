@@ -4,7 +4,7 @@ const TaskFilter = (props) =>{
 
     const {finished,filter,handleChange} = props
     return (
-        <div className="filter">
+        <div className="filter" id="top">
             <p>Filter Tasks:</p>
             <input placeholder="Find The One" value={props.filter} onChange={()=>handleChange(event)}></input>
             <p>Only Terminated</p>

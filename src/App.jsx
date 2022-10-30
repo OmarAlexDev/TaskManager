@@ -86,6 +86,9 @@ const App = () => {
         newI = {msg:"Task Added", on:true}
         setEmptyInput(newI)
         showAlert()
+        setTimeout(function() {
+          scroll("top-arrow")
+        },1500)
         })
         .catch(err=>{
           newI = {msg:"Error, something happened...", on:true}
@@ -131,7 +134,7 @@ const App = () => {
         <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
         {showed_tasks.length>0 ?
         <div className="lister">
-          <FontAwesomeIcon icon={faArrowRight} className="arrow-icon l" onClick={()=>scroll("top-arrow")} id="top"/>
+          <FontAwesomeIcon icon={faArrowRight} className="arrow-icon l" onClick={()=>scroll("top-arrow")}/>
           {showed_tasks}
           <FontAwesomeIcon icon={faArrowRight} className="arrow-icon r" onClick={()=>scroll("bottom-arrow")} id="bottom"/>
         </div>
