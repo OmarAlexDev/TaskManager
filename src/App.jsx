@@ -77,9 +77,10 @@ const App = () => {
       }
       taskService.post(task)
         .then(res=>{
+        console.log(res)
         setTasks(prev=>prev.concat(res))
         setNewTask({responsible:"",content:""})
-        newI = {msg:"Note Added", on:true}
+        newI = {msg:"Task Added", on:true}
         setEmptyInput(newI)
         showAlert()
         })
@@ -102,11 +103,11 @@ const App = () => {
     })
   }
 
-  const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter)) : tasks 
+  const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter)) : tasks 
   const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
 
-  const showed_tasks = finished_filter.map(currTask=>{
-    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={handleDelete}/>
+  const showed_tasks = finished_filter.map((currTask,index)=>{
+    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={handleDelete} place={index}/>
   })
 
   return (
@@ -119,7 +120,7 @@ const App = () => {
         <div className="lister">
           {showed_tasks}
         </div>
-        : <p id="no-note">No notes available</p>}
+        : <p id="no-note">No tasks available</p>}
       </div> 
     </div>
   )

@@ -16,7 +16,7 @@
 }
 .section{
   padding: 6%;
-  min-height: 100vh;
+  min-height: 90vh;
 }
 .creator{
   align-items: center;
@@ -63,6 +63,7 @@ button{
 }
 .view-list{
   background-color: #1F1D1D;
+  min-height: auto;
 }
 #no-note{
   color:white;
@@ -80,15 +81,17 @@ button{
     display: none;
 }
 .task-el{
-  cursor: pointer;
-  color:white;
-  padding: 5px;
+  color:#1F1D1D;
+  padding: 10px;
   flex: 0 0 auto;
   display: flex;         
   flex-direction: column;
   position: relative;
   place-items: center;
-  font-weight: 400;
+  font-weight: 600;
+  border: #1F1D1D solid 5px;
+  border-radius: 30px;
+  background-color: #E59866;
 }
 .task-sec{
   padding: 2%;
@@ -100,6 +103,7 @@ button{
 .task-sec.id{
   font-weight: 600;
   font-size: 25px;
+  text-align: center;
 }
 .task-buttons{
   display: flex;
@@ -108,12 +112,12 @@ button{
   justify-content: space-evenly;
 }
 .button-lister{
-  color:#E59866;
-  border-color: #E59866 ;
+  color:#1F1D1D;
+  border-color: #1F1D1D ;
 }
 .button-lister:hover{
-  background-color: #E59866;
-  color:#1F1D1D;
+  background-color: #1F1D1D;
+  color:#E59866;
 }
 .filter{
   margin-bottom: 50px;
