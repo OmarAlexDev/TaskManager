@@ -8,6 +8,9 @@ import TaskFilter from "./components/TaskFilter";
 
 import taskService from './services/taskService'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
+
 const App = () => {
   
   const [tasks,setTasks] = React.useState([])
@@ -103,6 +106,16 @@ const App = () => {
     })
   }
 
+  function scroll(id){
+    let section
+    if(id=="bottom-arrow"){
+       section = document.querySelector('#top');
+    }else{
+      section = document.querySelector('#bottom');
+    }
+    section!=undefined ? section.scrollIntoView( { behavior: 'smooth', block: 'start' } ) : null
+  }
+
   const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter)) : tasks 
   const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
 
@@ -118,7 +131,9 @@ const App = () => {
         <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
         {showed_tasks.length>0 ?
         <div className="lister">
+          <FontAwesomeIcon icon={faArrowRight} className="arrow-icon l" onClick={()=>scroll("top-arrow")} id="top"/>
           {showed_tasks}
+          <FontAwesomeIcon icon={faArrowRight} className="arrow-icon r" onClick={()=>scroll("bottom-arrow")} id="bottom"/>
         </div>
         : <p id="no-note">No tasks available</p>}
       </div> 

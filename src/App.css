@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 #root{
   background-color: #E59866;
   font-family: 'Roboto Mono', monospace;
@@ -16,14 +19,14 @@
 }
 .section{
   padding: 6%;
-  min-height: 90vh;
+  min-height: 100vh;
 }
 .creator{
   align-items: center;
-  padding-top:200px;
   display: flex;
   flex-direction: column;
   align-content: space-between;
+  justify-content: center;
 }
 .creator> p {
   font-weight: 400;
@@ -74,11 +77,23 @@ button{
 .lister{
   display: flex;
   flex-wrap: nowrap;
-  gap: 20px;
+  gap: 25px;
   overflow-x: auto;
+  align-items: center;
 }
 .lister::-webkit-scrollbar {
     display: none;
+}
+.arrow-icon{
+  color:#E59866;
+  height: 50px;
+}
+.arrow-icon.l{
+  margin-right: 10px;
+}
+.arrow-icon.r{
+  margin-left: 10px;
+  transform: rotate(180deg);
 }
 .task-el{
   color:#1F1D1D;
@@ -144,5 +159,12 @@ button{
   }
   .task-sec > p{
     max-width: none;
+  }
+  .arrow-icon.l{
+    transform: rotate(90deg);
+  }
+  .arrow-icon.r{
+    margin-left: 10px;
+    transform: rotate(270deg);
   }
 }
