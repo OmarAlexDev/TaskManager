@@ -27,6 +27,7 @@ html {
   flex-direction: column;
   align-content: space-between;
   justify-content: center;
+  padding-top:0;
 }
 .creator> p {
   font-weight: 400;
