@@ -3,7 +3,7 @@ import React from "react";
 const Login = (props) =>{
     const {user,emptyText,handleChange,loginUser} = props
     return(
-        <div className="creator section">
+        <div className="creator section login">
             <p>USERNAME</p>
             <input placeholder="---" onChange={()=>handleChange(event)} value={user.username} id="username"></input>
             <p>PASSWORD</p>

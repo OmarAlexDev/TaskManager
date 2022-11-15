@@ -167,7 +167,6 @@ const App = () => {
   return (
     <div className="app">
       <div className="nav" onClick={logoutUser}>CHECKED</div>
-      
       {
         !loggedUser ?
           <Login user={user}  handleChange={handleChange} emptyText={emptyInput} loginUser={loginUser}/> 
