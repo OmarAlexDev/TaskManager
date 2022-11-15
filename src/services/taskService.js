@@ -3,6 +3,12 @@ import axios from 'axios'
 //const base_url = "http://localhost:3001/api/tasks"
 const base_url = "/api/tasks"
 
+let token = null
+
+const setToken= (tkn)=>{
+    token =  `bearer ${tkn}`
+}
+
 const get =()=>{
     const request = axios.get(base_url)
     return request.then((res)=>res.data)
@@ -28,5 +34,6 @@ export default {
     get,
     post,
     remove,
-    update
+    update,
+    setToken
 }

@@ -10,6 +10,7 @@
     "server": "json-server -p3001 --watch db.json"
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.1.3",
