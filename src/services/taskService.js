@@ -14,14 +14,14 @@ const get =()=>{
     return request.then((res)=>res.data)
 }
 const post = (newTask)=>{
-    const request = axios.post(base_url,newTask)
+    const config = {headers: {Authorization: token}}
+    const request = axios.post(base_url,newTask,config)
     return request.then(res=>res.data)
 }
 const remove = (id) =>{
-    const request = axios.delete(`${base_url}/${id}`)
-    return request.then((res)=>{
-        console.log(res.data)
-    })
+    const config = {headers: {Authorization: token}}
+    const request = axios.delete(`${base_url}/${id}`,config)
+    return request.then((res)=>res.data)
 }
 const update = (id,newTask) =>{
     const request = axios.put(`${base_url}/${id}`,newTask)

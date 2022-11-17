@@ -13,9 +13,16 @@ html {
   width: inherit;
   padding-top: 20px;
   position: absolute;
-  text-align: center;
   font-weight: 700;
   letter-spacing: 1ch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.nav-user{
+  font-size: 11px;
+  letter-spacing: 0.8ch;
 }
 .section{
   padding: 6%;
@@ -58,12 +65,23 @@ button{
   border-width: 2px;
   cursor: pointer;
 }
-.button-creator{
-  margin-top: 3%;
+.button.log{
+  margin-top: 10%;
   color:#1F1D1D;
   border-color: #1F1D1D ;
 }
-.button-creator:hover{
+.button.vis{
+  margin-top: 3%;
+  padding: 5px;
+  color:#1F1D1D;
+  border-color: #1F1D1D ;
+}
+.log-msg{
+  font-size: 14px !important;
+  margin-bottom: 0;
+  margin-top: 10%;
+}
+.button.log:hover, .button.vis:hover{
   font-weight: 700;
   background-color: #1F1D1D;
   color:white;

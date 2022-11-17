@@ -1,16 +1,15 @@
 import React from "react";
 
 const TaskCreator = (props) =>{
-    const {handleClick,newTask,handleChange,emptyText} = props
+    const {handleClick,newTask,handleChange} = props
 
     return(
         <div className="creator section">
             <p>CREATE A NEW TASK</p>
-            <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.content} id="task"></input>
+            <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.content} name="task"></input>
             <p>ASSING A NEW RESPONSIBLE</p>
-            <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.responsible} id="responsible"></input>
-            <button onClick={handleClick} className="button-creator">GENERATE</button>
-            {emptyText.on ? <p>{emptyText.msg}</p> : ""}
+            <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.responsible} name="responsible"></input>
+            <button onClick={handleClick} className="button log">GENERATE</button>
         </div>
     )
 }

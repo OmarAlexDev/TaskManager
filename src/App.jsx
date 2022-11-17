@@ -1,6 +1,7 @@
 import React from "react";
 import './App.css'
 import {nanoid} from 'nanoid'
+import toast, { Toaster } from 'react-hot-toast';
 
 import TaskCreator from "./components/TaskCreator";
 import TaskList from "./components/TaskList";
@@ -9,6 +10,7 @@ import Login from "./components/Login";
 
 import taskService from './services/taskService'
 import loginService from "./services/loginService";
+import userService from "./services/userService";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
@@ -19,8 +21,7 @@ const App = () => {
   const [finishedStatus,setFinishedStatus] = React.useState(false)
   const [filter,setFilter] =React.useState('')
   const [newTask, setNewTask] = React.useState({responsible:"",content:""})
-  const [emptyInput, setEmptyInput] = React.useState({msg:"",on:false})
-  const [user,setUser] = React.useState({username:"",password:""})
+  const [user,setUser] = React.useState({username:'',password:'',name:'',rePassword:''})
   const [loggedUser,setLoggedUser] = React.useState(null)
   
   React.useEffect(()=>{
@@ -41,21 +42,29 @@ const App = () => {
   function handleChange(event){
     if(event.target.type=="checkbox"){
       setFinishedStatus(prev=>!prev)
-    }else if(event.target.id=="task"){
+    }else if(event.target.name=="task"){
       setNewTask(prevTask=>{ 
         return {...prevTask,content: event.target.value}
       })
-    }else if(event.target.id=="responsible"){
+    }else if(event.target.name=="responsible"){
       setNewTask(prevTask=>{ 
         return {...prevTask,responsible: event.target.value}
       })
-    }else if(event.target.id=="username"){
+    }else if(event.target.name=="username"){
       setUser(prev=>{ 
         return {...prev,username: event.target.value}
       })
-    }else if(event.target.id=="password"){
+    }else if(event.target.name=="password"){
       setUser(prev=>{ 
         return {...prev,password: event.target.value}
+      })
+    }else if(event.target.name=="name"){
+      setUser(prev=>{ 
+        return {...prev,name: event.target.value}
+      })
+    }else if(event.target.name=="rePassword"){
+      setUser(prev=>{ 
+        return {...prev,rePassword: event.target.value}
       })
     }else{
       setFilter(event.target.value)
@@ -73,23 +82,17 @@ const App = () => {
       .then(res=>{
         setTasks(prevTasks=>prevTasks.map(task=>{
           if(task.id==id){
-            return {
-              ...task, status:!task.status
-            }
+            return {...task, status:!task.status}
           }else{
             return task
           }
         }))
+        toast.success('Modified task!')
       })
-      .catch(err=>{console.log(err)})
+      .catch(err=>{
+        toast.error("Error, something happened...")
+      })
     }
-  }
-
-  function showAlert(message){
-    setEmptyInput(message)
-    setTimeout(function() {
-      setEmptyInput({msg:"", on:false})
-    }, 2000)
   }
 
   function createTask(){
@@ -100,45 +103,67 @@ const App = () => {
       }
       taskService.post(task)
         .then(res=>{
-        console.log(res)
-        setTasks(prev=>prev.concat(res))
-        setNewTask({responsible:"",content:""}) 
-        showAlert({msg:"Task Added", on:true})
-        setTimeout(function() {
-          scroll("top-arrow")
-        },1500)
+          setTasks(prev=>prev.concat(res))
+          setNewTask({responsible:"",content:""}) 
+          toast.success('Task added!')
+          setTimeout(function() {
+            scroll("top-arrow")
+          },1500)
         })
         .catch(err=>{
-          showAlert({msg:"Error, something happened...", on:true})
+          toast.error("Error, something happened...")
         })
 
-    }else{  
-      showAlert({msg:"Not enough data", on:true})
+    }else{ 
+      toast.error("Missing fields")
     }
   }
 
   function deleteTask(id){
-    taskService.remove(id).then(res=>{
-      setTasks(prevTasks=>prevTasks.filter(t=>t.id!=id))
-    })
+    taskService.remove(id)
+      .then(res=>{
+        setTasks(prevTasks=>prevTasks.filter(t=>t.id!==id))
+        toast.success('Task deleted!')
+      })
+      .catch(err=>{
+        toast.error(err.response.data.error)
+      })
+  }
+
+  function signUser(){
+    if((user.username && user.password && user.rePassword && user.name)!=''){
+      if(user.password!==user.rePassword){
+        return toast.error("Passwords unmatched")
+      }
+      userService.post(user)
+        .then(res=>{
+          loginUser()
+        })
+        .catch(err=>{     
+          toast.error(err.response.data.error)
+        })
+    }else{
+      toast.error("Missing one or more fields")
+    }
   }
 
   function loginUser(){
     if(user.username!='' && user.password!=''){
       loginService.post(user)
         .then(res=>{
-          showAlert({msg: "Access granted", on:true})
+          toast.success("Access granted")
           setTimeout(function() {
             setLoggedUser(res)
+            taskService.setToken(res.token) 
             window.localStorage.setItem('loggedUserTaskApp',JSON.stringify(res))
-            setUser({username:"",password:""})
+            setUser({username:'',password:'',name:'',rePassword:''})
           }, 2000)  
         })
         .catch(err=>{
-          showAlert({msg: err.response.data.error, on:true})
+          toast.error(err.response.data.error)
         })
     }else{
-      showAlert({msg:"Missing one or more credentials", on:true})
+      toast.error("Missing one or more credentials")
     }
   }
 
@@ -166,13 +191,20 @@ const App = () => {
 
   return (
     <div className="app">
-      <div className="nav" onClick={logoutUser}>CHECKED</div>
+      <div className="nav" onClick={logoutUser}>
+        <span>CHECKED</span>
+        {loggedUser ? 
+          <span className="nav-user">{loggedUser.username}</span> : ""}
+      </div>
+      <div>
+            <Toaster toastOptions={{className: '', duration: 2000, style: {} }}/>
+      </div>
       {
         !loggedUser ?
-          <Login user={user}  handleChange={handleChange} emptyText={emptyInput} loginUser={loginUser}/> 
+          <Login user={user}  handleChange={handleChange} loginUser={loginUser} signUser={signUser}/> 
         :
         <>
-          <TaskCreator emptyText={emptyInput} handleClick={createTask} handleChange={handleChange} newTask={newTask}/>
+          <TaskCreator handleClick={createTask} handleChange={handleChange} newTask={newTask}/>
           <div className="section view-list">
             <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
             {showed_tasks.length>0 ?
