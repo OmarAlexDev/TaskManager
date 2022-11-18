@@ -7,6 +7,7 @@ import TaskCreator from "./components/TaskCreator";
 import TaskList from "./components/TaskList";
 import TaskFilter from "./components/TaskFilter";
 import Login from "./components/Login";
+import Nav from "./components/Nav"
 
 import taskService from './services/taskService'
 import loginService from "./services/loginService";
@@ -23,6 +24,13 @@ const App = () => {
   const [newTask, setNewTask] = React.useState({responsible:"",content:""})
   const [user,setUser] = React.useState({username:'',password:'',name:'',rePassword:''})
   const [loggedUser,setLoggedUser] = React.useState(null)
+  const [divHeight, setDivHeight] = React.useState()
+
+  const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter)) : tasks 
+  const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
+  const showed_tasks = finished_filter.map((currTask,index)=>{
+    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={deleteTask} place={index}/>
+  })
   
   React.useEffect(()=>{
     taskService.get()
@@ -90,7 +98,7 @@ const App = () => {
         toast.success('Modified task!')
       })
       .catch(err=>{
-        toast.error("Error, something happened...")
+        toast.error(err.response.data.error)
       })
     }
   }
@@ -111,7 +119,7 @@ const App = () => {
           },1500)
         })
         .catch(err=>{
-          toast.error("Error, something happened...")
+          toast.error(err.response.data.error)
         })
 
     }else{ 
@@ -182,20 +190,13 @@ const App = () => {
     section!=undefined ? section.scrollIntoView( { behavior: 'smooth', block: 'start' } ) : null
   }
 
-  const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter)) : tasks 
-  const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
-
-  const showed_tasks = finished_filter.map((currTask,index)=>{
-    return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={deleteTask} place={index}/>
-  })
+  function retrieveheight(divHeight){
+    setDivHeight(divHeight)
+  }
 
   return (
     <div className="app">
-      <div className="nav" onClick={logoutUser}>
-        <span>CHECKED</span>
-        {loggedUser ? 
-          <span className="nav-user">{loggedUser.username}</span> : ""}
-      </div>
+      <Nav logoutUser={logoutUser} loggedUser={loggedUser} divHeight={divHeight}/>
       <div>
             <Toaster toastOptions={{className: '', duration: 2000, style: {} }}/>
       </div>
@@ -204,12 +205,11 @@ const App = () => {
           <Login user={user}  handleChange={handleChange} loginUser={loginUser} signUser={signUser}/> 
         :
         <>
-          <TaskCreator handleClick={createTask} handleChange={handleChange} newTask={newTask}/>
+          <TaskCreator handleClick={createTask} handleChange={handleChange} newTask={newTask} retrieveheight={retrieveheight}/>
           <div className="section view-list">
             <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
             {showed_tasks.length>0 ?
             <div className="lister">
-              <FontAwesomeIcon icon={faArrowRight} className="arrow-icon l" onClick={()=>scroll("top-arrow")} id="top"/>
               {showed_tasks}
               <FontAwesomeIcon icon={faArrowRight} className="arrow-icon r" onClick={()=>scroll("bottom-arrow")} id="bottom"/>
             </div>

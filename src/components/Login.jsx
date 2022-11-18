@@ -14,8 +14,7 @@ const Login = (props) =>{
     const bottonLogin=()=>{
         return(
             <>
-            <p className="log-msg">{visible? "Don´t have an account yet?": "Already an user?"}</p>
-            <button onClick={changeVisibility} className="button vis">{!visible? "LOGIN" : "SIGN IN"}</button>      
+            <span onClick={changeVisibility} className="log-msg">{visible? "Don´t have an account yet?": "Already an user?"}</span>   
             </> 
         )
     }

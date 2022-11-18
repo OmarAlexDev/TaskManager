@@ -1,10 +1,16 @@
 import React from "react";
 
 const TaskCreator = (props) =>{
-    const {handleClick,newTask,handleChange} = props
+
+    const {handleClick,newTask,handleChange,retrieveheight} = props
+    const ref = React.useRef(null)
+
+    React.useEffect(() => {
+        retrieveheight(ref.current.clientHeight)
+    },[])
 
     return(
-        <div className="creator section">
+        <div className="creator section" ref={ref}>
             <p>CREATE A NEW TASK</p>
             <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.content} name="task"></input>
             <p>ASSING A NEW RESPONSIBLE</p>
