@@ -21,7 +21,7 @@ const TaskList = (props,refs) =>{
                 Task #{props.place+1}
             </div>
             <div className="task-sec">
-                <div style={hideWhenVisible} >
+                <div id="hiddenInfo" style={hideWhenVisible} >
                     <p>Task: {content}</p>
                     <p>Responsible: {responsible}</p>
                     <p>Created: {prettyDate}</p>
@@ -34,7 +34,7 @@ const TaskList = (props,refs) =>{
                         <FontAwesomeIcon icon={faCircleXmark} className="info-icon"/>
                     </div>             
                 </div>
-                <div style={showWhenVisible} >
+                <div id="shownInfo" style={showWhenVisible} >
                     <p>Task: {content}</p>
                     <p>Status: <span style={status_style} className="status">{status ? "Terminated" : "Pending"}</span></p>
                     <div className="task-buttons">
