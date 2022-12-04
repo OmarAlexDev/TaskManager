@@ -46,7 +46,6 @@ const removeTaskFromDB = (id)=>{
 const updateTaskFromDB = (id,task)=>{
     return async dispatch=>{
         const modifiedTask = await taskService.update(id,task)
-        console.log(modifiedTask)
         return dispatch(updateTaskFromState(id))
     }
 }

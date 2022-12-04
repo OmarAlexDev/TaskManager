@@ -1,8 +1,13 @@
 import React from "react";
+import {useSelector, useDispatch} from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCircleInfo, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
+import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
+import {nanoid} from 'nanoid'
 
-const TaskList = (props,refs) =>{
+import { updateTaskFromDB, removeTaskFromDB, getTasks} from "../reducers/taskReducer";
+
+const TaskCard = (props) =>{
     const [visible,setVisible] = React.useState(false)
     const {id,content,date,status,responsible} =props.task_info
     const prettyDate= new Date(date).toDateString();
@@ -47,6 +52,61 @@ const TaskList = (props,refs) =>{
                 </div>        
             </div>
         </div>
+    )
+}
+
+const TaskList = (props)=>{
+    const {filter,handleToast, finishedStatus} = props
+    const tasks = useSelector(state=>state.tasks)
+    const dispatch = useDispatch()
+
+    const tasksFilteredByValue = tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter))
+    const tasksFilteredByStatus = finishedStatus ? tasksFilteredByValue.filter(t=>t.status==true) : tasksFilteredByValue
+    const showed_tasks = tasksFilteredByStatus.map((currTask,index)=>{
+        return <TaskCard key={nanoid()} task_info={currTask} handleClick={updateStatus} handleDelete={deleteTask} place={index}/>
+    })
+
+    React.useEffect(()=>{
+        console.log("fetching...")
+        dispatch(getTasks())
+    },[])
+
+    function updateStatus(id){
+        let modifTask = tasks.find(t=>t.id==id)
+        if(modifTask){
+          modifTask={
+            ...modifTask,
+            "status": !modifTask.status
+          }
+          dispatch(updateTaskFromDB(id,modifTask))
+          .then(res=>{
+            handleToast('Modified task!',false)
+          })
+          .catch(err=>{
+            handleToast(err.response.data.error,true)
+          })
+        }
+    }
+    
+    function deleteTask(id){   
+        dispatch(removeTaskFromDB(id))
+        .then(res=>{
+            handleToast('Task deleted!',false)
+        })
+        .catch(err=>{
+            handleToast(err.response.data.error,true)
+        })
+    }
+
+    return(
+        <>
+            {showed_tasks.length>0 ?
+            <div className="lister">
+                {showed_tasks}
+                <FontAwesomeIcon icon={faArrowRight} className="arrow-icon r" onClick={()=>scroll("bottom-arrow")} id="bottom"/>
+            </div>
+        : <p id="no-note">No tasks available</p>}
+        </>
     )
 }
 
