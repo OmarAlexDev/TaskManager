@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-//const base_url = "http://localhost:3001/api/tasks"
-const base_url = "/api/tasks"
+const base_url = "http://localhost:3001/api/tasks"
+//const base_url = "/api/tasks"
 
 let token = null
 
@@ -25,9 +25,7 @@ const remove = (id) =>{
 }
 const update = (id,newTask) =>{
     const request = axios.put(`${base_url}/${id}`,newTask)
-    return request.then((res)=>{
-        console.log(res.data)
-    })
+    return request.then((res)=>res.data)
 }
 
 export default {

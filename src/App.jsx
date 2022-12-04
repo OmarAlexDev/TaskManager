@@ -2,6 +2,7 @@ import React from "react";
 import './App.css'
 import {nanoid} from 'nanoid'
 import toast, { Toaster } from 'react-hot-toast';
+import {useDispatch, useSelector} from 'react-redux'
 
 import TaskCreator from "./components/TaskCreator";
 import TaskList from "./components/TaskList";
@@ -13,36 +14,39 @@ import taskService from './services/taskService'
 import loginService from "./services/loginService";
 import userService from "./services/userService";
 
+import { getTasks, addTaskToDB, removeTaskFromDB, updateTaskFromDB} from "./reducers/taskReducer";
+import {setLoggedUser} from './reducers/userReducer';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faArrowRight} from '@fortawesome/free-solid-svg-icons'
 
 const App = () => {
-  
-  const [tasks,setTasks] = React.useState([])
+
+  const dispatch = useDispatch()
+
   const [finishedStatus,setFinishedStatus] = React.useState(false)
   const [filter,setFilter] =React.useState('')
   const [newTask, setNewTask] = React.useState({responsible:"",content:""})
   const [user,setUser] = React.useState({username:'',password:'',name:'',rePassword:''})
-  const [loggedUser,setLoggedUser] = React.useState(null)
   const [divHeight, setDivHeight] = React.useState()
 
-  const input_filter = filter != '' ? tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter)) : tasks 
-  const finished_filter = finishedStatus ? input_filter.filter(t=>t.status==true) : input_filter
-  const showed_tasks = finished_filter.map((currTask,index)=>{
+  const loggedUser = useSelector(state=>state.user)
+  const tasks = useSelector(state=>state.tasks)
+  const tasksFilteredByValue = tasks.filter(t=>t.content.includes(filter) || t.responsible.includes(filter) || (new Date(t.date).toDateString()).includes(filter))
+  const tasksFilteredByStatus = finishedStatus ? tasksFilteredByValue.filter(t=>t.status==true) : tasksFilteredByValue
+  const showed_tasks = tasksFilteredByStatus.map((currTask,index)=>{
     return <TaskList key={nanoid()} handleClick={updateStatus} task_info={currTask} handleDelete={deleteTask} place={index}/>
   })
   
   React.useEffect(()=>{
-    taskService.get()
-      .then(res=>{
-        setTasks(res)})
+    dispatch(getTasks())
   },[])
 
   React.useEffect(()=>{
     let savedUser = window.localStorage.getItem('loggedUserTaskApp')
     if(savedUser!==null){
       savedUser = JSON.parse(savedUser)
-      setLoggedUser(savedUser)
+      dispatch(setLoggedUser(savedUser))
       taskService.setToken(savedUser.token)   
     }
   },[])
@@ -86,15 +90,8 @@ const App = () => {
         ...modifTask,
         "status": !modifTask.status
       }
-      taskService.update(id,modifTask)
+      dispatch(updateTaskFromDB(id,modifTask))
       .then(res=>{
-        setTasks(prevTasks=>prevTasks.map(task=>{
-          if(task.id==id){
-            return {...task, status:!task.status}
-          }else{
-            return task
-          }
-        }))
         toast.success('Modified task!')
       })
       .catch(err=>{
@@ -109,9 +106,8 @@ const App = () => {
         ...newTask,
         status: false
       }
-      taskService.post(task)
+      dispatch(addTaskToDB(task))
         .then(res=>{
-          setTasks(prev=>prev.concat(res))
           setNewTask({responsible:"",content:""}) 
           toast.success('Task added!')
           setTimeout(function() {
@@ -127,10 +123,9 @@ const App = () => {
     }
   }
 
-  function deleteTask(id){
-    taskService.remove(id)
+  function deleteTask(id){   
+    dispatch(removeTaskFromDB(id))
       .then(res=>{
-        setTasks(prevTasks=>prevTasks.filter(t=>t.id!==id))
         toast.success('Task deleted!')
       })
       .catch(err=>{
@@ -161,7 +156,7 @@ const App = () => {
         .then(res=>{
           toast.success("Access granted")
           setTimeout(function() {
-            setLoggedUser(res)
+            dispatch(setLoggedUser(res))
             taskService.setToken(res.token) 
             window.localStorage.setItem('loggedUserTaskApp',JSON.stringify(res))
             setUser({username:'',password:'',name:'',rePassword:''})
@@ -177,7 +172,7 @@ const App = () => {
 
   function logoutUser(){
     window.localStorage.removeItem('loggedUserTaskApp')
-    setLoggedUser(null)
+    dispatch(setLoggedUser(null))
   }
 
   function scroll(id){
@@ -201,7 +196,7 @@ const App = () => {
             <Toaster toastOptions={{className: '', duration: 2000, style: {} }}/>
       </div>
       {
-        !loggedUser ?
+        loggedUser===null ?
           <Login user={user}  handleChange={handleChange} loginUser={loginUser} signUser={signUser}/> 
         :
         <>
