@@ -1,13 +1,10 @@
 html {
   scroll-behavior: smooth;
 }
-#root{
-  background-color: #E59866;
-  font-family: 'Roboto Mono', monospace;
-}
 .app{
   width: 100%;
   position: relative;
+  font-family: 'Roboto Mono', monospace;
 }
 .nav{
   width: inherit;
@@ -27,10 +24,18 @@ html {
 .nav-user{
   font-size: 11px;
   letter-spacing: 0.8ch;
+  font-weight: 400;
+}
+.darkmode-icon{
+  position: absolute;
+  right: 40px;
+  height: 35px;
+  cursor: pointer;
 }
 .section{
   padding: 6%;
   min-height: 100vh;
+  transition: all .5s;
 }
 .creator{
   align-items: center;
@@ -62,17 +67,17 @@ input{
 }
 button{
   border-style: solid;
-  font-weight: 400;
+  font-weight: 700;
   background-color: transparent;
   border-radius: 10px;
   padding: 10px;
   border-width: 2px;
   cursor: pointer;
+  transition: all .5s;
+  border: none;
 }
 .button.log{
   margin-top: 40px;
-  color:#1F1D1D;
-  border-color: #1F1D1D ;
 }
 .log-msg{
   font-size: 12px !important;
@@ -81,19 +86,11 @@ button{
   cursor: pointer;
 }
 .button.log:hover{
-  font-weight: 700;
-  background-color: #1F1D1D;
-  color:white;
+
 }
 .view-list{
-  background-color: #1F1D1D;
+  background-color: #F7F1EA;
   min-height: auto;
-}
-#no-note{
-  color:white;
-  font-weight: 600;
-  font-size: 25px;
-  text-align: center;
 }
 .lister{
   display: flex;
@@ -101,12 +98,14 @@ button{
   gap: 25px;
   overflow-x: auto;
   align-items: center;
+  padding: 3%;
+  transition: all .5s;
 }
 .lister::-webkit-scrollbar {
     display: none;
 }
 .arrow-icon{
-  color:#E59866;
+  color:#E7F6F2;
   height: 50px;
   cursor: pointer;
 }
@@ -118,18 +117,18 @@ button{
   transform: rotate(180deg);
 }
 .task-el{
-  color:#1F1D1D;
+  color:#395B64;
   padding: 10px;
   flex: 0 0 auto;
   display: flex;         
   flex-direction: column;
   position: relative;
   place-items: center;
-  font-weight: 600;
-  border: #1F1D1D solid 5px;
-  border-radius: 30px;
-  background-color: #E59866;
+  font-weight: 700;
+  border-radius: 50px;
   width: 245px;
+  box-shadow:  10px 10px 20px #121414;
+  background-color: #A5C9CA;
 }
 .info-icon{
   height: 25px;
@@ -147,6 +146,11 @@ button{
   font-weight: 600;
   font-size: 25px;
   text-align: center;
+  color:#2C3333;
+}
+.task-header{
+  color:#2C3333;
+  font-weight: 400;
 }
 .task-buttons{
   display: flex;
@@ -158,20 +162,21 @@ button{
   cursor: pointer;
 }
 .button-lister{
-  color:#1F1D1D;
-  border-color: #1F1D1D ;
+  color:#F7F1EA;
+  background-color: #395B64;
+  border: none;
+  border: solid #395B64 2px;
 }
 .button-lister:hover{
-  background-color: #1F1D1D;
-  color:#E59866;
+  background-color: transparent;
+  color: #395B64;
 }
 .filter{
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   text-align: center;
 }
 .filter > p{
   text-align: center;
-  color:#E59866;
   font-weight: 400;
   font-size: 20px;
 }
@@ -200,5 +205,9 @@ button{
   }
   .task-el{
     min-width: 280px;
+  }
+  .darkmode-icon{
+    height: 30px;
+    right: 30px;
   }
 }

@@ -1,16 +1,20 @@
 import React from "react";
-import {useDispatch} from 'react-redux'
+import {useDispatch,useSelector} from 'react-redux'
 import { addTaskToDB } from "../reducers/taskReducer";
 
 const TaskCreator = (props) =>{
     const dispatch = useDispatch()
+    const darkMode = useSelector(state=>state.darkmode)
     const [newTask, setNewTask] = React.useState({responsible:"",content:""})
     const {retrieveheight, handleToast,scroll} = props
-    const ref = React.useRef(null)
-
-    React.useEffect(() => {
-        retrieveheight(ref.current.clientHeight)
-    },[])
+    const sectionStyle = {
+        color: darkMode ==="LIGHT" ? "#2C3333" : "#E7F6F2",
+        backgroundColor: darkMode ==="LIGHT" ? "#A5C9CA" : "#395B64",
+    }
+    const buttonStyle={
+        color: darkMode ==="LIGHT" ? "white" : "#395B64",
+        backgroundColor: darkMode ==="LIGHT" ? "#395B64" : "#E7F6F2"
+    }
 
     function createTask(){
         if(newTask.content!="" && newTask.responsible!=""){
@@ -47,12 +51,12 @@ const TaskCreator = (props) =>{
     }
 
     return(
-        <div className="creator section" ref={ref}>
+        <div className="creator section" style={sectionStyle}>
             <p>CREATE A NEW TASK</p>
             <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.content} name="task"></input>
             <p>ASSING A NEW RESPONSIBLE</p>
             <input placeholder="---" onChange={()=>handleChange(event)} value={newTask.responsible} name="responsible"></input>
-            <button onClick={createTask} className="button log">GENERATE</button>
+            <button onClick={createTask} className="button log" style={buttonStyle}>GENERATE</button>
         </div>
     )
 }

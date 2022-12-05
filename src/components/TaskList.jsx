@@ -16,6 +16,7 @@ const TaskCard = (props) =>{
     const hideWhenVisible = {display: visible? "" : "none"}
     const showWhenVisible = {display: visible? "none" : ""}
 
+
     function changeVisibility(){
         setVisible(prev=>!prev)
     }
@@ -27,10 +28,10 @@ const TaskCard = (props) =>{
             </div>
             <div className="task-sec">
                 <div id="hiddenInfo" style={hideWhenVisible} >
-                    <p>Task: {content}</p>
-                    <p>Responsible: {responsible}</p>
-                    <p>Created: {prettyDate}</p>
-                    <p>Status: <span style={status_style} className="status">{status ? "Terminated" : "Pending"}</span></p>
+                    <p><span className="task-header">Task: </span>{content}</p>
+                    <p><span className="task-header">Responsible: </span> {responsible}</p>
+                    <p><span className="task-header">Created: </span>{prettyDate}</p>
+                    <p><span className="task-header">Status: </span><span style={status_style} className="status">{status ? "Terminated" : "Pending"}</span></p>
                     <div className="task-buttons">
                         <button onClick={()=>props.handleClick(id)} className="button-lister">{status? "Uncheck" : "Check"}</button>
                         <button onClick={()=>props.handleDelete(id)} className="button-lister">Remove</button>
@@ -40,8 +41,8 @@ const TaskCard = (props) =>{
                     </div>             
                 </div>
                 <div id="shownInfo" style={showWhenVisible} >
-                    <p>Task: {content}</p>
-                    <p>Status: <span style={status_style} className="status">{status ? "Terminated" : "Pending"}</span></p>
+                    <p><span className="task-header">Task: </span>{content}</p>
+                    <p><span className="task-header">Status: </span><span style={status_style} className="status">{status ? "Terminated" : "Pending"}</span></p>
                     <div className="task-buttons">
                         <button onClick={()=>props.handleClick(id)} className="button-lister">{status? "Uncheck" : "Check"}</button>
                         <button onClick={()=>props.handleDelete(id)} className="button-lister">Remove</button>
@@ -56,7 +57,7 @@ const TaskCard = (props) =>{
 }
 
 const TaskList = (props)=>{
-    const {filter,handleToast, finishedStatus} = props
+    const {filter,handleToast, finishedStatus, scroll} = props
     const tasks = useSelector(state=>state.tasks)
     const dispatch = useDispatch()
 
@@ -67,7 +68,6 @@ const TaskList = (props)=>{
     })
 
     React.useEffect(()=>{
-        console.log("fetching...")
         dispatch(getTasks())
     },[])
 

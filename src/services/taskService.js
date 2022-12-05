@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const base_url = "http://localhost:3001/api/tasks"
-//const base_url = "/api/tasks"
+//const base_url = "http://localhost:3001/api/tasks"
+const base_url = "/api/tasks"
 
 let token = null
 

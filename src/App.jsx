@@ -17,10 +17,14 @@ const App = () => {
 
   const dispatch = useDispatch()
   const loggedUser = useSelector(state=>state.user)
+  const darkMode = useSelector(state=>state.darkmode)
 
   const [finishedStatus,setFinishedStatus] = React.useState(false)
   const [filter,setFilter] =React.useState('')
-  const [divHeight, setDivHeight] = React.useState()
+  const listStyle = {
+    color: darkMode ==="LIGHT" ? "#E7F6F2" : "#A5C9CA",
+    backgroundColor: darkMode ==="LIGHT" ? "#2C3333" : "#2C3333",
+  }
   
   React.useEffect(()=>{
     let savedUser = window.localStorage.getItem('loggedUserTaskApp')
@@ -53,25 +57,20 @@ const App = () => {
     section!=undefined ? section.scrollIntoView( { behavior: 'smooth', block: 'start' } ) : null
   }
 
-  function retrieveheight(divHeight){
-    setDivHeight(divHeight)
-  }
-
   return (
     <div className="app">
-      <Nav divHeight={divHeight}/>
+      <Nav/>
       <div>
             <Toaster toastOptions={{className: '', duration: 2000, style: {} }}/>
       </div>
       {
-        loggedUser===null ?
-          <Login handleToast={handleToast}/> 
+        loggedUser===null ? <Login handleToast={handleToast}/> 
         :
         <>
-          <TaskCreator retrieveheight={retrieveheight} handleToast={handleToast} scroll={scroll}/>
-          <div className="section view-list">
+          <TaskCreator handleToast={handleToast} scroll={scroll}/>
+          <div className="section view-list" style={listStyle}>
             <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
-            <TaskList filter={filter} handleToast={handleToast} finishedStatus={finishedStatus}/>
+            <TaskList filter={filter} handleToast={handleToast} finishedStatus={finishedStatus} scroll={scroll}/>
           </div> 
         </>
       }

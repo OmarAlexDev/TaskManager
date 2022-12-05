@@ -1,5 +1,5 @@
 import React from "react";
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import userService from "../services/userService";
 import taskService from "../services/taskService";
 import loginService from "../services/loginService";
@@ -8,12 +8,25 @@ import { setLoggedUser } from "../reducers/userReducer";
 
 const Login = (props) =>{
     const dispatch = useDispatch()
+    const darkMode = useSelector(state=>state.darkmode)
     const [visible,setVisible] = React.useState(true)
     const [user,setUser] = React.useState({username:'',password:'',name:'',rePassword:''})
     const {handleToast} = props
     
-    const hideWhenVisible = {display: visible? 'none' : ''}
-    const showWhenVisible = {display: visible? '' : 'none'}
+    const hideWhenVisible = {
+        display: visible? 'none' : '',
+        color: darkMode ==="LIGHT" ? "#2C3333" : "#E7F6F2",
+        backgroundColor: darkMode ==="LIGHT" ? "#A5C9CA" : "#395B64",
+    }
+    const showWhenVisible = {
+        display: visible? '' : 'none',
+        color: darkMode ==="LIGHT" ? "#2C3333" : "#E7F6F2",
+        backgroundColor: darkMode ==="LIGHT" ? "#A5C9CA" : "#395B64",
+    }
+    const buttonStyle={
+        color: darkMode ==="LIGHT" ? "white" : "#395B64",
+        backgroundColor: darkMode ==="LIGHT" ? "#395B64" : "#E7F6F2"
+    }
 
     function signUser(){
         if((user.username && user.password && user.rePassword && user.name)!=''){
@@ -87,7 +100,7 @@ const Login = (props) =>{
                 <input type="password" placeholder="---" onChange={()=>handleChange(event)} value={user.password} name="password"></input>
                 <p>RE-ENTER NEW PASSWORD</p>
                 <input type="password" placeholder="---" onChange={()=>handleChange(event)} value={user.rePassword} name="rePassword"></input>
-                <button onClick={signUser} className="button log">SIGN IN</button>
+                <button onClick={signUser} className="button log" style={buttonStyle}>SIGN IN</button>
                 <span onClick={changeVisibility} className="log-msg">Already an user?</span>
             </div>
             <div className="creator section login" style={showWhenVisible}>
@@ -95,7 +108,7 @@ const Login = (props) =>{
                 <input placeholder="---" onChange={()=>handleChange(event)} value={user.username} name="username"></input>
                 <p>PASSWORD</p>
                 <input type="password" placeholder="---" onChange={()=>handleChange(event)} value={user.password} name="password"></input>
-                <button onClick={loginUser} className="button log">LOGIN</button>
+                <button onClick={loginUser} className="button log" style={buttonStyle}>LOGIN</button>
                 <span onClick={changeVisibility} className="log-msg">Don´t have an account yet?</span>
             </div>  
         </div>
