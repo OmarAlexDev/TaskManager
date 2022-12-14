@@ -2,6 +2,7 @@ import React from "react";
 import './App.css'
 import toast, { Toaster } from 'react-hot-toast';
 import {useDispatch, useSelector} from 'react-redux'
+import {Routes,Route,Link, Navigate, useNavigate} from 'react-router-dom'
 
 import TaskCreator from "./components/TaskCreator";
 import TaskList from "./components/TaskList";
@@ -18,6 +19,7 @@ const App = () => {
   const dispatch = useDispatch()
   const loggedUser = useSelector(state=>state.user)
   const darkMode = useSelector(state=>state.darkmode)
+  const navigate = useNavigate()
 
   const [finishedStatus,setFinishedStatus] = React.useState(false)
   const [filter,setFilter] =React.useState('')
@@ -32,6 +34,7 @@ const App = () => {
       savedUser = JSON.parse(savedUser)
       dispatch(setLoggedUser(savedUser))
       taskService.setToken(savedUser.token)   
+      navigate('/')
     }
   },[])
 
@@ -56,24 +59,26 @@ const App = () => {
     }
     section!=undefined ? section.scrollIntoView( { behavior: 'smooth', block: 'start' } ) : null
   }
-
   return (
     <div className="app">
       <Nav/>
       <div>
             <Toaster toastOptions={{className: '', duration: 2000, style: {} }}/>
       </div>
-      {
-        loggedUser===null ? <Login handleToast={handleToast}/> 
-        :
-        <>
-          <TaskCreator handleToast={handleToast} scroll={scroll}/>
-          <div className="section view-list" style={listStyle}>
-            <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
-            <TaskList filter={filter} handleToast={handleToast} finishedStatus={finishedStatus} scroll={scroll}/>
-          </div> 
-        </>
-      }
+      <Routes>
+        <Route path="/login" element={<Login handleToast={handleToast}/>}/>
+        <Route path="/" element={ loggedUser!==null ?
+          <>
+            <TaskCreator handleToast={handleToast} scroll={scroll}/>
+            <div className="section view-list" style={listStyle}>
+              <TaskFilter finished={finishedStatus} filterVal={filter} handleChange={handleChange}/>
+              <TaskList filter={filter} handleToast={handleToast} finishedStatus={finishedStatus} scroll={scroll}/>
+            </div> 
+          </> :
+          <Navigate replace to="/login" />
+        } />
+      </Routes>
+
     </div>
   )
 }

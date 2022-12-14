@@ -232,4 +232,12 @@ describe('Task_app',()=>{
       cy.contains('LOGIN')
     })
   })
+
+  describe('DarkMode',()=>{
+    it('Toggle from light to dark mode',function(){
+      cy.get('.creator').should('have.css', 'background-color', 'rgb(165, 201, 202)')
+      cy.get('.darkmode-icon').click()
+      cy.get('.creator').should('have.css', 'background-color', 'rgb(57, 91, 100)')
+    })
+  })
 })

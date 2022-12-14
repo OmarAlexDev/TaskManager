@@ -161,6 +161,12 @@ button{
 .task-buttons.icons{
   cursor: pointer;
 }
+#no-note{
+  color:white;
+  font-weight: 600;
+  font-size: 25px;
+  text-align: center;
+}
 .button-lister{
   color:#F7F1EA;
   background-color: #395B64;

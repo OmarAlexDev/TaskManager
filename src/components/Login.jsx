@@ -1,5 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import userService from "../services/userService";
 import taskService from "../services/taskService";
 import loginService from "../services/loginService";
@@ -12,6 +13,7 @@ const Login = (props) =>{
     const [visible,setVisible] = React.useState(true)
     const [user,setUser] = React.useState({username:'',password:'',name:'',rePassword:''})
     const {handleToast} = props
+    const navigate = useNavigate()
     
     const hideWhenVisible = {
         display: visible? 'none' : '',
@@ -55,6 +57,7 @@ const Login = (props) =>{
                     taskService.setToken(res.token) 
                     window.localStorage.setItem('loggedUserTaskApp',JSON.stringify(res))
                     setUser({username:'',password:'',name:'',rePassword:''})
+                    navigate('/')
                 }, 2000)  
             })
             .catch(err=>{
